@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comercio Bilateral · Argentina – Argelia</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --sand: #F5F2EB;
+    --sand-dark: #EDE8DF;
+    --ink: #1A1916;
+    --ink-muted: #5A5750;
+    --ink-faint: #9A9690;
+    --teal: #0A6B56;
+    --teal-light: #D6EDE8;
+    --coral: #C4401A;
+    --coral-light: #FAE8E2;
+    --blue: #1B4F8A;
+    --blue-light: #DDE8F5;
+    --gold: #B07C1A;
+    --gold-light: #FAF0D6;
+    --border: rgba(26,25,22,0.12);
+    --border-strong: rgba(26,25,22,0.22);
+    --font: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 80px 48px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: rgba(10,107,86,0.18);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 680px;
+    margin-bottom: 24px;
+  }
+  .hero h1 strong { font-weight: 600; color: #6ECDB5; }
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-bottom: 48px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .hero-stat-val {
+    font-size: 36px;
+    font-weight: 500;
+    color: #6ECDB5;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky;
+    top: 0;
+    background: var(--ink);
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner {
+    display: flex;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+    overflow-x: auto;
+  }
+  .nav a {
+    display: block;
+    padding: 14px 0;
+    margin-right: 32px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .nav a:hover { color: rgba(255,255,255,0.85); }
+  .nav a.active { color: #6ECDB5; border-bottom-color: #6ECDB5; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+  .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .section-lead {
+    font-size: 16px;
+    color: var(--ink-muted);
+    max-width: 640px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  /* ── METRIC CARDS ── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .metric {
+    background: var(--sand);
+    padding: 24px 20px;
+  }
+  .metric-val {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .metric-label {
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+  .c-teal { color: var(--teal); }
+  .c-coral { color: var(--coral); }
+  .c-blue { color: var(--blue); }
+  .c-gold { color: var(--gold); }
+
+  /* ── CHART WRAPPERS ── */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px; }
+  .chart-grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; margin-bottom: 40px; }
+  .chart-box { background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 24px; }
+  .chart-box-title { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin-bottom: 16px; }
+  .chart-wrap { position: relative; width: 100%; }
+
+  /* ── LEGEND ── */
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── BAR RANKINGS ── */
+  .bar-list { display: flex; flex-direction: column; gap: 7px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-name { font-size: 12px; color: var(--ink-muted); width: 90px; flex-shrink: 0; text-align: right; line-height: 1.3; }
+  .bar-name.hl { color: var(--ink); font-weight: 500; }
+  .bar-track { flex: 1; background: var(--sand-dark); border-radius: 2px; overflow: hidden; height: 16px; }
+  .bar-fill { height: 100%; border-radius: 2px; }
+  .bar-val { font-size: 11px; color: var(--ink-faint); width: 52px; flex-shrink: 0; font-family: var(--mono); }
+  .bar-val.hl { color: var(--ink-muted); font-weight: 500; }
+
+  /* ── PRODUCT SECTIONS ── */
+  .prod-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 32px; width: fit-content; }
+  .prod-tab { padding: 10px 24px; font-size: 13px; cursor: pointer; background: var(--sand); color: var(--ink-muted); border: none; border-right: 1px solid var(--border); font-family: var(--font); transition: background 0.12s; }
+  .prod-tab:last-child { border-right: none; }
+  .prod-tab.active { background: var(--ink); color: #fff; }
+  .prod-section { display: none; }
+  .prod-section.visible { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+  .cat-head {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 20px 0 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .cat-amt { font-weight: 500; color: var(--ink-muted); }
+  .prod-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .prod-name { font-size: 12px; color: var(--ink-muted); width: 190px; flex-shrink: 0; line-height: 1.35; }
+  .prod-name.hl { color: var(--ink); font-weight: 500; }
+  .prod-track { flex: 1; background: var(--sand-dark); border-radius: 2px; overflow: hidden; height: 14px; }
+  .prod-fill { height: 100%; border-radius: 2px; }
+  .prod-val { font-size: 11px; color: var(--ink-faint); width: 58px; text-align: right; font-family: var(--mono); flex-shrink: 0; }
+  .prod-val.hl { color: var(--ink-muted); font-weight: 500; }
+  .note-box {
+    background: var(--sand-dark);
+    border-left: 3px solid var(--border-strong);
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 10px 0 14px;
+  }
+
+  /* ── SYNTHESIS ── */
+  .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .synth-card {
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+  }
+  .synth-card-title { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
+  .synth-card-body { font-size: 14px; color: var(--ink-muted); line-height: 1.7; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.35);
+    text-align: center;
+    padding: 32px 48px;
+    font-size: 12px;
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── CONCLUSIONS ── */
+  .conclusion-block {
+    border-left: 3px solid var(--border-strong);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    background: #fff;
+    border-radius: 0 4px 4px 0;
+  }
+  .conclusion-block.accent-teal { border-left-color: var(--teal); }
+  .conclusion-block.accent-coral { border-left-color: var(--coral); }
+  .conclusion-block.accent-blue { border-left-color: var(--blue); }
+  .conclusion-block.accent-gold { border-left-color: var(--gold); }
+  .conclusion-block.accent-purple { border-left-color: #534AB7; }
+  .conclusion-title { font-size: 14px; font-weight: 500; margin-bottom: 8px; color: var(--ink); }
+  .conclusion-body { font-size: 14px; color: var(--ink-muted); line-height: 1.75; }
+  .conclusion-body strong { font-weight: 500; color: var(--ink); }
+  .ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 32px; }
+  .ref-card {
+    background: var(--sand-dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px;
+    text-decoration: none;
+    display: block;
+    transition: background 0.12s;
+  }
+  .ref-card:hover { background: #E8E3D8; }
+  .ref-org { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .ref-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; line-height: 1.4; }
+  .ref-desc { font-size: 12px; color: var(--ink-muted); line-height: 1.5; }
+  .correction-box {
+    background: #FFF8EC;
+    border: 1px solid #E8C96A;
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .correction-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A6B1A; margin-bottom: 8px; }
+  .correction-body { font-size: 14px; color: var(--ink-muted); line-height: 1.75; }
+  .correction-body strong { font-weight: 500; color: var(--ink); }
+  @media (max-width: 700px) {
+    .hero { padding: 48px 20px 40px; }
+    .hero-stats { gap: 28px; }
+    .container { padding: 0 20px; }
+    .section { padding: 48px 0; }
+    .chart-grid, .chart-grid-3, .synthesis-grid { grid-template-columns: 1fr; }
+    .prod-section.visible { grid-template-columns: 1fr; }
+    .nav-inner { padding: 0 20px; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <p class="hero-eyebrow">Informe de Comercio Exterior · Junio 2026</p>
+    <h1>Comercio bilateral<br><strong>Argentina – Argelia</strong></h1>
+    <p class="hero-sub">Análisis del intercambio comercial bilateral, la relevancia relativa de cada país como socio del otro, y el detalle de productos exportados e importados. Datos: UN Comtrade, 2014–2025.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-val">$15.9 MM</div>
+        <div class="hero-stat-label">exportaciones ARG → DZA acumuladas</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">$925 M</div>
+        <div class="hero-stat-label">importaciones DZA → ARG acumuladas</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">17:1</div>
+        <div class="hero-stat-label">ratio de asimetría comercial</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">12 años</div>
+        <div class="hero-stat-label">serie histórica analizada</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#bilateral" class="active">I · Intercambio bilateral</a>
+    <a href="#relevancia">II · Relevancia relativa</a>
+    <a href="#productos">III · Detalle de productos</a>
+    <a href="#conclusiones">IV · Comentarios finales</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     SECCIÓN I – INTERCAMBIO BILATERAL
+══════════════════════════════════════ -->
+<section class="section" id="bilateral">
+  <div class="container">
+    <p class="section-eyebrow">Sección I</p>
+    <h2 class="section-title">El intercambio bilateral</h2>
+    <p class="section-lead">La relación comercial es marcadamente asimétrica: Argentina exporta alimentos y agroinsumos; Argelia responde con fertilizantes, energía y, puntualmente, vacunas. El superávit acumulado a favor de Argentina supera los $14.9 mil millones.</p>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-val c-teal">$15.9 MM</div>
+        <div class="metric-label">Exportaciones ARG → DZA<br>2014–2025</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val c-coral">$925 M</div>
+        <div class="metric-label">Importaciones DZA → ARG<br>2014–2025</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val c-teal">+$14.9 MM</div>
+        <div class="metric-label">Superávit comercial<br>favorable a Argentina</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">$1.32 MM</div>
+        <div class="metric-label">Promedio anual exportado<br>a Argelia</div>
+      </div>
+    </div>
+
+    <div class="chart-grid-3">
+      <div class="chart-box">
+        <div class="chart-box-title">Evolución anual 2014–2025 · millones USD</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#0A6B56"></div>Exportaciones ARG → DZA</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#C4401A"></div>Importaciones DZA → ARG</div>
+        </div>
+        <div class="chart-wrap" style="height:260px">
+          <canvas id="chartEvolucion" role="img" aria-label="Evolución exportaciones e importaciones 2014-2025"></canvas>
+        </div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Composición exportaciones ARG → DZA</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#0A6B56"></div>Cereales 48.5%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#1B4F8A"></div>Complejo soja 27.5%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#C4401A"></div>Lácteos 13.8%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#B07C1A"></div>Legumbres 2.8%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7A7670"></div>Otros 7.4%</div>
+        </div>
+        <div class="chart-wrap" style="height:200px">
+          <canvas id="chartDonutExp" role="img" aria-label="Composición exportaciones argentinas a Argelia"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-box">
+        <div class="chart-box-title">Balance comercial anual · superávit Argentina</div>
+        <div class="chart-wrap" style="height:180px">
+          <canvas id="chartBalance" role="img" aria-label="Balance comercial anual favorable a Argentina"></canvas>
+        </div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Composición importaciones DZA → ARG</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div>Fertilizantes (urea) 51.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7A7670"></div>Gas natural licuado 16.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#C4401A"></div>Vacunas 9.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#0A6B56"></div>Pesca y carnes 7.4%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#B07C1A"></div>Otros 15.4%</div>
+        </div>
+        <div class="chart-wrap" style="height:170px">
+          <canvas id="chartDonutImp" role="img" aria-label="Composición importaciones desde Argelia"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECCIÓN II – RELEVANCIA RELATIVA
+══════════════════════════════════════ -->
+<section class="section" id="relevancia">
+  <div class="container">
+    <p class="section-eyebrow">Sección II</p>
+    <h2 class="section-title">Relevancia relativa</h2>
+    <p class="section-lead">¿Qué importa Argelia para Argentina, y Argentina para Argelia? Las respuestas son asimétricas: Argelia es un destino significativo pero no crítico para el pais sudamericano, mientras que Argentina es un proveedor alimentario relevante para Argelia.</p>
+
+    <div class="chart-grid">
+      <!-- Argelia para Argentina -->
+      <div>
+        <div class="chart-box-title" style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);margin-bottom:16px;">Argelia como destino de exportación argentina · 2014–2025</div>
+
+        <div class="metrics" style="margin-bottom:20px;">
+          <div class="metric">
+            <div class="metric-val" style="font-size:22px;">#6–20°</div>
+            <div class="metric-label">ranking oscilante según cosecha</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val c-teal" style="font-size:22px;">1.3–2.8%</div>
+            <div class="metric-label">share del total exportado</div>
+          </div>
+        </div>
+
+        <div class="chart-box" style="margin-bottom:16px;">
+          <div class="chart-box-title">Ranking y share de Argelia en exportaciones ARG</div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#0A6B56"></div>% sobre total exportado</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div>Ranking (eje der., invertido)</div>
+          </div>
+          <div class="chart-wrap" style="height:200px">
+            <canvas id="chartRankExp" role="img" aria-label="Ranking y share de Argelia en exportaciones argentinas"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-box-title">Top destinos exportación Argentina 2024</div>
+          <div class="bar-list">
+            <div class="bar-row"><div class="bar-name">Brasil</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#D3D1C7"></div></div><div class="bar-val">$13.6 MM</div></div>
+            <div class="bar-row"><div class="bar-name">EE.UU.</div><div class="bar-track"><div class="bar-fill" style="width:48%;background:#D3D1C7"></div></div><div class="bar-val">$6.5 MM</div></div>
+            <div class="bar-row"><div class="bar-name">Chile</div><div class="bar-track"><div class="bar-fill" style="width:47%;background:#D3D1C7"></div></div><div class="bar-val">$6.3 MM</div></div>
+            <div class="bar-row"><div class="bar-name">China</div><div class="bar-track"><div class="bar-fill" style="width:44%;background:#D3D1C7"></div></div><div class="bar-val">$6.0 MM</div></div>
+            <div class="bar-row"><div class="bar-name">India</div><div class="bar-track"><div class="bar-fill" style="width:29%;background:#D3D1C7"></div></div><div class="bar-val">$3.9 MM</div></div>
+            <div class="bar-row"><div class="bar-name">Viet Nam</div><div class="bar-track"><div class="bar-fill" style="width:24%;background:#D3D1C7"></div></div><div class="bar-val">$3.3 MM</div></div>
+            <div class="bar-row"><div class="bar-name hl">Argelia</div><div class="bar-track"><div class="bar-fill" style="width:7.4%;background:#0A6B56"></div></div><div class="bar-val hl">$1.0 MM</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--ink-faint);margin-top:10px;font-family:var(--mono);">puesto n°20 entre 206 destinos</div>
+        </div>
+      </div>
+
+      <!-- Argentina para Argelia -->
+      <div>
+        <div class="chart-box-title" style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-muted);margin-bottom:16px;">Argentina como proveedor de Argelia · años disponibles</div>
+
+        <div class="metrics" style="margin-bottom:20px;">
+          <div class="metric">
+            <div class="metric-val" style="font-size:22px;">#8–11°</div>
+            <div class="metric-label">proveedor consistente y relevante</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val c-teal" style="font-size:22px;">2.4–3.3%</div>
+            <div class="metric-label">share del total importado por DZA</div>
+          </div>
+        </div>
+
+        <div class="chart-box" style="margin-bottom:16px;">
+          <div class="chart-box-title">Share de Argentina en importaciones argelinas</div>
+          <div class="chart-wrap" style="height:200px">
+            <canvas id="chartShareDza" role="img" aria-label="Share de Argentina en importaciones de Argelia"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-box-title">Top proveedores de Argelia 2024</div>
+          <div class="bar-list">
+            <div class="bar-row"><div class="bar-name">China</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#D3D1C7"></div></div><div class="bar-val">$10.6 MM</div></div>
+            <div class="bar-row"><div class="bar-name">Italia</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:#D3D1C7"></div></div><div class="bar-val">$3.2 MM</div></div>
+            <div class="bar-row"><div class="bar-name">Francia</div><div class="bar-track"><div class="bar-fill" style="width:29%;background:#D3D1C7"></div></div><div class="bar-val">$3.1 MM</div></div>
+            <div class="bar-row"><div class="bar-name">Brasil</div><div class="bar-track"><div class="bar-fill" style="width:29%;background:#D3D1C7"></div></div><div class="bar-val">$3.0 MM</div></div>
+            <div class="bar-row"><div class="bar-name">Turquía</div><div class="bar-track"><div class="bar-fill" style="width:24%;background:#D3D1C7"></div></div><div class="bar-val">$2.6 MM</div></div>
+            <div class="bar-row"><div class="bar-name">Alemania</div><div class="bar-track"><div class="bar-fill" style="width:22%;background:#D3D1C7"></div></div><div class="bar-val">$2.3 MM</div></div>
+            <div class="bar-row"><div class="bar-name hl">Argentina</div><div class="bar-track"><div class="bar-fill" style="width:10.8%;background:#0A6B56"></div></div><div class="bar-val hl">$1.1 MM</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--ink-faint);margin-top:10px;font-family:var(--mono);">puesto n°11 entre 192 orígenes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-grid">
+      <div class="synth-card" style="border-left:3px solid var(--teal);">
+        <div class="synth-card-title">Argelia para Argentina</div>
+        <div class="synth-card-body">Destino relevante pero no crítico. Representa entre el 1.3% y el 2.8% de las exportaciones totales argentinas, con un ranking que oscila entre el 6° y el 20° puesto según el resultado de cada cosecha. Como proveedor hacia Argentina, es completamente marginal: menos del 0.2% del total importado.</div>
+      </div>
+      <div class="synth-card" style="border-left:3px solid var(--blue);">
+        <div class="synth-card-title">Argentina para Argelia</div>
+        <div class="synth-card-body">Proveedor estructuralmente importante. Argentina figura sistemáticamente entre el 8° y el 11° proveedor mundial de Argelia, con una cuota del 2.4% al 3.3% del total importado — equivalente al peso de países como Canadá o Rusia. Es el principal abastecedor de alimentos de Argelia, muy por encima de lo que su peso global sugeriría.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECCIÓN III – DETALLE DE PRODUCTOS
+══════════════════════════════════════ -->
+<section class="section" id="productos">
+  <div class="container">
+    <p class="section-eyebrow">Sección III</p>
+    <h2 class="section-title">Detalle de productos</h2>
+    <p class="section-lead">Desglose a nivel de partida arancelaria HS de los principales bienes intercambiados, acumulado 2014–2025 para exportaciones y 2018–2025 para importaciones reportadas por Argentina.</p>
+
+    <div class="prod-tabs">
+      <button class="prod-tab active" onclick="showProd('exp', this)">🇦🇷 Argentina exporta a Argelia</button>
+      <button class="prod-tab" onclick="showProd('imp', this)">🇩🇿 Argentina importa de Argelia</button>
+    </div>
+
+    <!-- EXPORTS -->
+    <div class="prod-section visible" id="prod-exp">
+
+      <div>
+        <div class="cat-head"><span>🌽 Cereales</span><span class="cat-amt">$7.82 MM · 48.8%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Maíz (no semilla)</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#0A6B56"></div></div><div class="prod-val hl">$6.838 MM</div></div>
+        <div class="prod-row"><div class="prod-name">Trigo (no duro, no semilla)</div><div class="prod-track"><div class="prod-fill" style="width:13.5%;background:#3D9B84"></div></div><div class="prod-val">$927 M</div></div>
+        <div class="prod-row"><div class="prod-name">Cebada (no semilla)</div><div class="prod-track"><div class="prod-fill" style="width:0.8%;background:#7EC8B5"></div></div><div class="prod-val">$54 M</div></div>
+        <div class="note-box">Argentina es uno de los 3–5 principales exportadores mundiales de maíz y trigo. Argelia importa anualmente entre 5–8 MM de toneladas de granos para su industria molinera y alimentaria.</div>
+
+        <div class="cat-head"><span>🫘 Complejo soja</span><span class="cat-amt">$4.41 MM · 27.5%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Pellets / expellers de soja</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#1B4F8A"></div></div><div class="prod-val hl">$3.607 MM</div></div>
+        <div class="prod-row"><div class="prod-name">Aceite de soja crudo</div><div class="prod-track"><div class="prod-fill" style="width:22%;background:#5282B5"></div></div><div class="prod-val">$805 M</div></div>
+        <div class="note-box">Los pellets son la proteína vegetal que Argelia usa para alimentar su ganadería avícola y porcina. Argentina es el mayor exportador mundial de harina y aceite de soja.</div>
+
+        <div class="cat-head"><span>🥛 Lácteos</span><span class="cat-amt">$2.21 MM · 13.8%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Leche en polvo entera</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#C4401A"></div></div><div class="prod-val hl">$2.094 MM</div></div>
+        <div class="prod-row"><div class="prod-name">Leche en polvo descremada</div><div class="prod-track"><div class="prod-fill" style="width:4.6%;background:#E07050"></div></div><div class="prod-val">$97 M</div></div>
+        <div class="prod-row"><div class="prod-name">Manteca y grasas lácteas</div><div class="prod-track"><div class="prod-fill" style="width:1%;background:#E9A090"></div></div><div class="prod-val">$22 M</div></div>
+        <div class="note-box">Argelia es el mayor importador individual de leche en polvo argentina. El crecimiento fue muy marcado desde 2021: pasó de ~$75M a $323M en 2025.</div>
+      </div>
+
+      <div>
+        <div class="cat-head"><span>🫘 Legumbres y oleaginosas</span><span class="cat-amt">$522 M · 3.3%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Porotos / judías secas</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#B07C1A"></div></div><div class="prod-val hl">$287 M</div></div>
+        <div class="prod-row"><div class="prod-name">Maní pelado (no semilla)</div><div class="prod-track"><div class="prod-fill" style="width:54%;background:#D0A040"></div></div><div class="prod-val">$156 M</div></div>
+        <div class="prod-row"><div class="prod-name">Semillas de girasol</div><div class="prod-track"><div class="prod-fill" style="width:9%;background:#E8C070"></div></div><div class="prod-val">$26 M</div></div>
+        <div class="prod-row"><div class="prod-name">Garbanzos secos</div><div class="prod-track"><div class="prod-fill" style="width:2.4%;background:#E8C070"></div></div><div class="prod-val">$7 M</div></div>
+
+        <div class="cat-head"><span>🍎 Frutas frescas y secas</span><span class="cat-amt">$34 M · 0.2%</span></div>
+        <div class="prod-row"><div class="prod-name">Manzanas frescas</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#888780"></div></div><div class="prod-val">$15 M</div></div>
+        <div class="prod-row"><div class="prod-name">Ciruelas pasas</div><div class="prod-track"><div class="prod-fill" style="width:57%;background:#A8A6A0"></div></div><div class="prod-val">$9 M</div></div>
+        <div class="prod-row"><div class="prod-name">Peras frescas</div><div class="prod-track"><div class="prod-fill" style="width:61%;background:#A8A6A0"></div></div><div class="prod-val">$9 M</div></div>
+
+        <div class="cat-head"><span>🐟 Productos del mar</span><span class="cat-amt">$22 M · 0.1%</span></div>
+        <div class="prod-row"><div class="prod-name">Langostinos congelados</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#6B8C7C"></div></div><div class="prod-val">$8 M</div></div>
+        <div class="prod-row"><div class="prod-name">Merluza congelada entera</div><div class="prod-track"><div class="prod-fill" style="width:80%;background:#8AABA0"></div></div><div class="prod-val">$6 M</div></div>
+
+        <div class="cat-head"><span>🏭 Industriales y energía</span><span class="cat-amt">$168 M · 1.0%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Gas natural licuado (GNL)</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#4A4845"></div></div><div class="prod-val hl">$105 M</div></div>
+        <div class="prod-row"><div class="prod-name">Urea (fertilizante)</div><div class="prod-track"><div class="prod-fill" style="width:46%;background:#6A6865"></div></div><div class="prod-val">$49 M</div></div>
+        <div class="prod-row"><div class="prod-name">Medicamentos</div><div class="prod-track"><div class="prod-fill" style="width:17%;background:#8A8885"></div></div><div class="prod-val">$18 M</div></div>
+        <div class="prod-row"><div class="prod-name">Camiones y vehículos</div><div class="prod-track"><div class="prod-fill" style="width:13%;background:#8A8885"></div></div><div class="prod-val">$15 M</div></div>
+        <div class="note-box">La presencia de GNL entre las exportaciones argentinas es puntual y reciente. Los vehículos corresponden a camiones y utilitarios ensamblados en Argentina.</div>
+      </div>
+    </div>
+
+    <!-- IMPORTS -->
+    <div class="prod-section" id="prod-imp">
+
+      <div>
+        <div class="cat-head"><span>🧪 Fertilizantes e insumos agrícolas</span><span class="cat-amt">$496 M · 50.1%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Urea (fertilizante nitrogenado)</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#534AB7"></div></div><div class="prod-val hl">$479 M</div></div>
+        <div class="prod-row"><div class="prod-name">Fosfatos cálcicos naturales</div><div class="prod-track"><div class="prod-fill" style="width:3.5%;background:#8075D0"></div></div><div class="prod-val">$17 M</div></div>
+        <div class="note-box">Principal producto importado. Argelia es uno de los mayores productores mundiales de urea, subproducto de sus enormes reservas de gas natural. Argentina la usa como fertilizante nitrogenado en maíz, trigo y soja. Hay una ironía circular: Argentina le vende granos a Argelia y le compra el fertilizante para producirlos.</div>
+
+        <div class="cat-head"><span>⛽ Energía</span><span class="cat-amt">$162 M · 16.4%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Gas natural licuado (GNL)</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#888780"></div></div><div class="prod-val hl">$162 M</div></div>
+        <div class="note-box">Aparece en años de déficit energético argentino: 2018 ($21M), 2020 ($6M), 2022 ($90M), 2023 ($46M). Ausente en 2025, consistente con la reducción de importaciones energéticas gracias a Vaca Muerta.</div>
+
+        <div class="cat-head"><span>💉 Farmacéuticos</span><span class="cat-amt">$93 M · 9.4%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Vacunas para medicina humana</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#C4401A"></div></div><div class="prod-val hl">$93 M</div></div>
+        <div class="note-box">Concentrado casi totalmente en 2021. Corresponde a vacunas Sputnik V intermediadas a través de Argelia durante la pandemia de COVID-19.</div>
+      </div>
+
+      <div>
+        <div class="cat-head"><span>🐟 Productos del mar</span><span class="cat-amt">$48 M · 4.8%</span></div>
+        <div class="prod-row"><div class="prod-name hl">Filetes de merluza congelados</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#0A6B56"></div></div><div class="prod-val hl">$18 M</div></div>
+        <div class="prod-row"><div class="prod-name">Langostinos congelados</div><div class="prod-track"><div class="prod-fill" style="width:72%;background:#3D9B84"></div></div><div class="prod-val">$13 M</div></div>
+        <div class="prod-row"><div class="prod-name">Calamar / calamar volador</div><div class="prod-track"><div class="prod-fill" style="width:16%;background:#7EC8B5"></div></div><div class="prod-val">$3 M</div></div>
+        <div class="note-box">Dato paradójico: Argentina le compra a Argelia sus propios productos del mar (merluza, langostinos). Se trata posiblemente de capturas con bandera argelina en el Atlántico Sur o reexportaciones de producto de origen argentino.</div>
+
+        <div class="cat-head"><span>🥩 Carne vacuna</span><span class="cat-amt">$22 M · 2.2%</span></div>
+        <div class="prod-row"><div class="prod-name">Carne sin hueso congelada</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#7A7670"></div></div><div class="prod-val">$17 M</div></div>
+        <div class="prod-row"><div class="prod-name">Carne sin hueso fresca</div><div class="prod-track"><div class="prod-fill" style="width:29%;background:#A8A6A0"></div></div><div class="prod-val">$5 M</div></div>
+        <div class="note-box">Otro dato inusual: Argentina importa carne vacuna desde Argelia. Probable origen en operaciones de triangulación o en la presencia de frigoríficos de capital argentino en el norte de África.</div>
+
+        <div class="cat-head"><span>🔩 Industria y equipamiento</span><span class="cat-amt">$24 M · 2.4%</span></div>
+        <div class="prod-row"><div class="prod-name">Partes de cajas de cambio</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#B07C1A"></div></div><div class="prod-val">$5 M</div></div>
+        <div class="prod-row"><div class="prod-name">Cemento portland blanco</div><div class="prod-track"><div class="prod-fill" style="width:80%;background:#D0A040"></div></div><div class="prod-val">$4 M</div></div>
+        <div class="prod-row"><div class="prod-name">Transformadores eléctricos</div><div class="prod-track"><div class="prod-fill" style="width:60%;background:#D0A040"></div></div><div class="prod-val">$3 M</div></div>
+        <div class="prod-row"><div class="prod-name">Motores diesel</div><div class="prod-track"><div class="prod-fill" style="width:58%;background:#D0A040"></div></div><div class="prod-val">$3 M</div></div>
+
+        <div class="cat-head"><span>🐴 Otros</span><span class="cat-amt">$17 M · 1.7%</span></div>
+        <div class="prod-row"><div class="prod-name">Gases raros (no argón)</div><div class="prod-track"><div class="prod-fill" style="width:100%;background:#888780"></div></div><div class="prod-val">$7 M</div></div>
+        <div class="prod-row"><div class="prod-name">Caballos vivos reproductores</div><div class="prod-track"><div class="prod-fill" style="width:57%;background:#A8A6A0"></div></div><div class="prod-val">$4 M</div></div>
+        <div class="note-box">Argelia es un mercado de exportación de equinos argentinos de alta sangre, en particular pura sangre de carrera y polo.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECCIÓN IV – COMENTARIOS FINALES
+══════════════════════════════════════ -->
+<section class="section" id="conclusiones">
+  <div class="container">
+    <p class="section-eyebrow">Sección IV</p>
+    <h2 class="section-title">Comentarios finales</h2>
+    <p class="section-lead">Una lectura integrada del vínculo comercial y referencias a fuentes primarias para cada conclusión.</p>
+
+    <!-- BLOQUE 1 -->
+    <div class="conclusion-block accent-teal">
+      <div class="conclusion-title">1 · Una relación asimétrica pero mutuamente funcional</div>
+      <div class="conclusion-body">
+        El comercio bilateral entre Argentina y Argelia es <strong>profundamente asimétrico en volumen</strong> ($15.9 MM vs. $925 M en doce años) pero <strong>funcionalmente complementario</strong>: cada país provee al otro exactamente lo que no puede producir en cantidad suficiente. Argentina abastece alimentos (granos, leche en polvo, legumbres) y agroinsumos; Argelia provee energía (GNL) y fertilizantes nitrogenados (urea). El superávit estructural de Argentina ($14.9 MM acumulados) refleja esa asimetría productiva, no una negociación desfavorable para ninguna de las partes.
+      </div>
+    </div>
+
+    <!-- BLOQUE 2 -->
+    <div class="conclusion-block accent-blue">
+      <div class="conclusion-title">2 · Argelia depende estructuralmente de Argentina para alimentar a su población</div>
+      <div class="conclusion-body">
+        La FAO documenta que <strong>la seguridad alimentaria argelina depende en un 70% de las importaciones de cereales</strong>. El trigo representa el 60% del aporte calórico de la dieta argelina —la mayor tasa per cápita del mundo árabe— y Argelia consume 11 millones de toneladas anuales produciendo solo 3 millones. En maíz, Argentina y Brasil explican el 87% de los envíos a Argelia en los últimos cinco años, con Argentina liderando ese flujo. En leche en polvo, Argelia absorbe aproximadamente el 73% de las exportaciones argentinas del producto, siendo al mismo tiempo uno de los cinco mayores importadores de lácteos del mundo. Esta dependencia no es coyuntural: es estructural, derivada de la geografía y del patrón alimentario argelino.
+      </div>
+    </div>
+
+    <!-- BLOQUE 3 -->
+    <div class="conclusion-block accent-gold">
+      <div class="conclusion-title">3 · El rol de Argelia en el aprovisionamiento de urea: relevante en ese segmento, limitado en el total</div>
+      <div class="conclusion-body">
+        Argentina importa entre el 50% y el 67% de toda la urea que consume anualmente. Argelia —gran productora de urea gracias a sus reservas de gas natural— es el segundo o tercer proveedor en ese segmento específico (25% en 2024, 13% en 2025). Hay aquí una <strong>ironía circular</strong> que merece destacarse: Argentina le exporta a Argelia los cereales y la leche que alimentan a su población, y le compra a Argelia la urea con la que fertiliza los campos que producen esos cereales. Sin embargo, en el universo total de fertilizantes —donde los fosfatados (MAP, DAP) representan casi la mitad del volumen importado—, <strong>Marruecos es el proveedor dominante para Argentina</strong>, como señala la BCR, seguido de China y EE.UU. El rol de Argelia está correctamente acotado al segmento nitrogenado.
+      </div>
+    </div>
+
+    <!-- BLOQUE 4 -->
+    <div class="conclusion-block accent-coral">
+      <div class="conclusion-title">4 · Relevancia comercial relativa: distintas perspectivas, distintas conclusiones</div>
+      <div class="conclusion-body">
+        Desde Buenos Aires, Argelia ocupa el puesto 6°–20° entre los destinos de exportación, con una cuota del 1.3–2.8% del total. Es un mercado significativo pero no crítico, y su peso oscila según la cosecha. Desde Argel, la perspectiva es radicalmente distinta: Argentina figura como el 8°–11° proveedor mundial, con una cuota de 2.4–3.3% del total importado —comparable a países como Canadá o Rusia—, siendo además el principal proveedor de alimentos en términos de volumen y criticidad. La OMC registra a Argentina como el sexto proveedor de Argelia en 2017 (3.3% de sus importaciones totales), lo que es consistente con los datos de UN Comtrade utilizados en este análisis.
+      </div>
+    </div>
+
+    <!-- BLOQUE 5 -->
+    <div class="conclusion-block accent-purple">
+      <div class="conclusion-title">5 · Perspectivas y riesgos</div>
+      <div class="conclusion-body">
+        El gobierno argelino ha declarado el maíz un cultivo de prioridad estratégica y aspira a dejar de importarlo hacia 2026–2028, con planes de desarrollar 220.000 hectáreas en el sur desértico del país. Si ese plan prosperase, reduciría la dependencia de Argentina en el rubro más voluminoso. En sentido inverso, el crecimiento de la industria avícola argelina —que impulsa la demanda de pellets de soja y maíz— actúa como contrapeso. En lácteos, la dependencia de Argentina se profundizó tras la eliminación de retenciones a las exportaciones en agosto de 2024. El riesgo geopolítico más relevante para Argentina es la concentración de sus importaciones de fertilizantes nitrogenados en el norte de África y Medio Oriente: el 39% de los nitrogenados importados en 2025 provino de esa región, expuesta a tensiones que afectan logística y precios.
+      </div>
+    </div>
+
+    <!-- REFERENCIAS -->
+    <div style="margin-top: 40px;">
+      <p style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 16px;">Fuentes y referencias primarias</p>
+      <div class="ref-grid">
+        <a class="ref-card" href="https://www.fao.org/giews/countrybrief/country.jsp?code=DZA" target="_blank" rel="noopener">
+          <div class="ref-org">FAO · GIEWS</div>
+          <div class="ref-title">Country Brief: Argelia (actualización enero 2026)</div>
+          <div class="ref-desc">Monitor de seguridad alimentaria de la FAO. Documenta la dependencia estructural de Argelia de importaciones de cereales y la variabilidad de su producción doméstica.</div>
+        </a>
+        <a class="ref-card" href="https://www.fao.org/giews/countrybrief/country/DZA/pdf/DZA.pdf" target="_blank" rel="noopener">
+          <div class="ref-org">FAO · GIEWS</div>
+          <div class="ref-title">Country Brief Argelia — PDF (junio 2025)</div>
+          <div class="ref-desc">Versión descargable del informe GIEWS con datos de producción, importaciones y perspectivas de cosecha 2025.</div>
+        </a>
+        <a class="ref-card" href="https://ttd.wto.org/en/profiles/algeria" target="_blank" rel="noopener">
+          <div class="ref-org">OMC · Tariff & Trade Data</div>
+          <div class="ref-title">Perfil comercial de Argelia</div>
+          <div class="ref-desc">Plataforma oficial de la OMC. Confirma a Argentina como el 6° proveedor de Argelia en 2017 (3.3% de las importaciones totales), entre China, la UE, Turquía, EE.UU. y Corea.</div>
+        </a>
+        <a class="ref-card" href="https://www.bcr.com.ar/es/mercados/investigacion-y-desarrollo/informativo-semanal/noticias-informativo-semanal/la-89" target="_blank" rel="noopener">
+          <div class="ref-org">BCR · Bolsa de Comercio de Rosario</div>
+          <div class="ref-title">Importación de fertilizantes: segundo mayor volumen en 2025 (marzo 2026)</div>
+          <div class="ref-desc">Análisis del mercado de fertilizantes en Argentina. Identifica a Nigeria, Rusia y Argelia como los tres principales proveedores de nitrogenados en 2025, y a Marruecos como el principal proveedor del total de fertilizantes.</div>
+        </a>
+        <a class="ref-card" href="https://www.bcr.com.ar/es/mercados/investigacion-y-desarrollo/informativo-semanal/noticias-informativo-semanal/por-primera-1" target="_blank" rel="noopener">
+          <div class="ref-org">BCR · Bolsa de Comercio de Rosario</div>
+          <div class="ref-title">Por primera vez en tres años, creció el consumo de fertilizantes (marzo 2025)</div>
+          <div class="ref-desc">Informe anual de fertilizantes 2024. Señala explícitamente a Marruecos como el principal origen de importaciones de fertilizantes para Argentina y detalla la estructura del mercado fosfatado y nitrogenado.</div>
+        </a>
+        <a class="ref-card" href="https://comtrade.un.org" target="_blank" rel="noopener">
+          <div class="ref-org">UN Comtrade</div>
+          <div class="ref-title">Base de datos de comercio internacional</div>
+          <div class="ref-desc">Fuente primaria de todos los datos de flujos bilaterales utilizados en este informe. Serie 2014–2025, metodología FOB, clasificación HS a nivel de partida arancelaria.</div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  Fuente de datos: UN Comtrade · FAO GIEWS · OMC · BCR · Metodología FOB · Análisis y visualización elaborados con Claude (Anthropic) · Junio 2026
+</footer>
+
+<script>
+// ── SCROLL SPY ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 90) cur = s.id; });
+  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + cur); });
+});
+
+// ── CHART DEFAULTS ──
+const TEAL = '#0A6B56', CORAL = '#C4401A', BLUE = '#1B4F8A', GOLD = '#B07C1A', GRAY = '#888780';
+const PURPLE = '#534AB7', SAND2 = '#EDE8DF';
+const gridC = 'rgba(26,25,22,0.07)', tickC = 'rgba(26,25,22,0.45)';
+
+const years = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+
+// Chart 1 – Evolución anual
+new Chart(document.getElementById('chartEvolucion'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Exportaciones', data: [1601,1148,1164,1471,1723,1524,1095,1467,1597,895,1012,1170], backgroundColor: TEAL, borderRadius: 2 },
+      { label: 'Importaciones', data: [56,0.02,49,17,87,64,68,47,181,107,131,119], backgroundColor: CORAL, borderRadius: 2 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.y.toLocaleString('es-AR') + ' M' } } },
+    scales: {
+      x: { ticks: { color: tickC, font: { size: 10 }, autoSkip: false, maxRotation: 0 }, grid: { color: gridC } },
+      y: { ticks: { color: tickC, font: { size: 11 }, callback: v => '$' + v + 'M' }, grid: { color: gridC } }
+    }
+  }
+});
+
+// Chart 2 – Donut exports
+new Chart(document.getElementById('chartDonutExp'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Cereales','Complejo soja','Lácteos','Legumbres','Otros'],
+    datasets: [{ data: [7820,4412,2213,449,1128], backgroundColor: [TEAL, BLUE, CORAL, GOLD, GRAY], borderWidth: 0 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '62%',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' $' + (ctx.parsed/1000).toFixed(2) + ' MM (' + Math.round(ctx.parsed/16022*100) + '%)' } } }
+  }
+});
+
+// Chart 3 – Balance
+new Chart(document.getElementById('chartBalance'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{ data: [1546,1148,1114,1454,1636,1460,1028,1421,1416,788,881,1051], borderColor: TEAL, backgroundColor: 'rgba(10,107,86,0.1)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: TEAL, borderWidth: 2 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' +$' + ctx.parsed.y.toLocaleString('es-AR') + ' M' } } },
+    scales: {
+      x: { ticks: { color: tickC, font: { size: 10 }, autoSkip: false, maxRotation: 0 }, grid: { color: gridC } },
+      y: { ticks: { color: tickC, font: { size: 11 }, callback: v => '$' + v + 'M' }, grid: { color: gridC }, min: 0 }
+    }
+  }
+});
+
+// Chart 4 – Donut imports
+new Chart(document.getElementById('chartDonutImp'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Fertilizantes','Gas natural','Vacunas','Pesca y carnes','Otros'],
+    datasets: [{ data: [479,162,93,70,186], backgroundColor: [PURPLE, GRAY, CORAL, TEAL, GOLD], borderWidth: 0 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '62%',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.toLocaleString('es-AR') + ' M (' + Math.round(ctx.parsed/990*100) + '%)' } } }
+  }
+});
+
+// Chart 5 – Ranking + share Argelia en exports ARG
+new Chart(document.getElementById('chartRankExp'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: '% total exportado', data: [2.34,2.02,2.01,2.52,2.80,2.34,2.00,1.88,1.81,1.34,1.27,1.34], backgroundColor: TEAL, borderRadius: 2, yAxisID: 'y' },
+      { label: 'Ranking', data: [10,14,12,8,6,11,12,13,12,18,20,18], type: 'line', borderColor: PURPLE, pointBackgroundColor: PURPLE, pointRadius: 4, borderWidth: 2, yAxisID: 'y2', fill: false, tension: 0.25 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+    scales: {
+      x: { ticks: { color: tickC, font: { size: 10 }, autoSkip: false, maxRotation: 0 }, grid: { color: gridC } },
+      y: { ticks: { color: tickC, font: { size: 11 }, callback: v => v + '%' }, grid: { color: gridC }, min: 0, max: 3.5, position: 'left' },
+      y2: { reverse: true, min: 1, max: 25, ticks: { color: PURPLE, font: { size: 10 }, callback: v => '#' + v, stepSize: 4 }, grid: { display: false }, position: 'right' }
+    }
+  }
+});
+
+// Chart 6 – Share Argentina en imports DZA (años disponibles)
+new Chart(document.getElementById('chartShareDza'), {
+  type: 'bar',
+  data: {
+    labels: ['2014','2015','2016','2017','2024'],
+    datasets: [{ data: [3.30, 2.48, 2.83, 3.30, 2.40], backgroundColor: BLUE, borderRadius: 2 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y.toFixed(2) + '% del total importado por Argelia' } } },
+    scales: {
+      x: { ticks: { color: tickC, font: { size: 11 } }, grid: { color: gridC } },
+      y: { ticks: { color: tickC, font: { size: 11 }, callback: v => v + '%' }, grid: { color: gridC }, min: 0, max: 4 }
+    }
+  }
+});
+
+// ── PRODUCT TABS ──
+function showProd(id, btn) {
+  document.querySelectorAll('.prod-section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.prod-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('prod-' + id).classList.add('visible');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
